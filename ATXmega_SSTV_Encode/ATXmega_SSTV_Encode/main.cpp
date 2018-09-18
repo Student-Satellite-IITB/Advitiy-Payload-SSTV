@@ -30,7 +30,7 @@ volatile int pixelCount=0,timeCount[2]={0,0};
 int interruptPeriod = ((((F_CPU)/(CPU_PRESCALER*1000000))*532)-1);	//Counter cycles for 532us
 int led =1;
 USART_data_t USART_data;											//Instantiation of USART data packet
-
+volatile int frequency=0,phase=0,prevPhase=0,prevFreq=0;
 void SetClock0()
 {
 	//Compare Match A timer													
@@ -150,51 +150,60 @@ unsigned int getphase(float prevPhase,float nextFreq, float prevTime)
 }
 int main(void)
 {
-	SetClock0();	
-	//SetClock1();
-	SetUsart();
-	//sei();
-   	SPI_Master_init();
-	SPI_send16(0x100);	
-	Set_AD9833(2300,0);
-// 	TCC0.CNT=0;
-// 	sei();
-// 	//TCC1.CNT=0;
-// 	while (pixelCount<1000);
-// 	cli();
-// 	PORTF_OUTTGL=PIN7_bm;
-// 	_delay_ms(532);                                       
-// 	PORTF_OUTTGL=PIN7_bm;
-// 	pixelCount=0;
-// 	led=2;
-// 	sei();
-// 	while (pixelCount<1000);
-// 	cli();
-// 	while(1)
-// 	{
-// 		Set_AD9833(3000,0);
-// 		_delay_ms(1000);
-// 	}
+	SetClock0();	//SetClock1();
+	SetUsart();		//sei();
+	SPI_Master_init();
+	SPI_send16(0x100);	//Reset AD9833
+	
+//VIS Code 
+	_delay_ms(100);
+	Set_AD9833(1900,0);	_delay_ms(300);	//leader tone
+	Set_AD9833(1200,0);	_delay_ms(10);	//break
+	Set_AD9833(1900,0);	_delay_ms(300);	//leader
+	Set_AD9833(1200,0);	_delay_ms(29);	_delay_us(839);	//VIS start bit
+//PD90 VIS code = 99d = 0b1100011
+	Set_AD9833(1100,0);	_delay_ms(29);	_delay_us(839);	//bit 0=1
+	Set_AD9833(1100,0);	_delay_ms(29);	_delay_us(839);	//bit 1=1
+	Set_AD9833(1300,0);	_delay_ms(29);  _delay_us(839);	//bit 2=0
+	Set_AD9833(1300,0);	_delay_ms(29);	_delay_us(839);	//bit 3=0
+	Set_AD9833(1300,0);	_delay_ms(29);	_delay_us(839);	//bit 4=0
+	Set_AD9833(1100,0);	_delay_ms(29);	_delay_us(839);	//bit 5=1
+	Set_AD9833(1100,0);	_delay_ms(29);	_delay_us(839);	//bit 6=1
+	Set_AD9833(1300,0);	_delay_ms(29);	_delay_us(839);	//Parity bit
+	Set_AD9833(1200,0);	_delay_ms(29);	_delay_us(839);	//stop bit
+	
+//Image Data	
+	for(int lineSet=0; lineSet<=128; lineSet++)
+	{
+		Set_AD9833(1200,0); _delay_ms(19); _delay_us(840);	//Sync Pulse
+		Set_AD9833(1500,0); _delay_ms(1); _delay_us(919);	//Porch
+	//Pixel Interrupt sequence
+		pixelCount=0;
+		TCC0.CNT=0;
+		sei();
+		while(pixelCount<=1280);
+		cli();
+	}
+	
+	while(1)
+	{
+		
+	}
 }
-// void SPI_receive(uint8_t)
-// {
-// 	
-// }
-
 
 ISR(TCC0_OVF_vect)
 {
-	if(led==1) PORTF_OUTTGL=PIN4_bm;
-	else if(led==2) PORTF_OUTTGL=PIN2_bm;
+	Set_AD9833(frequency,phase);
+	prevPhase=phase;
+	prevFreq=frequency;
 	pixelCount++;
-	if (pixelCount<2)
-	{
-		timeCount[pixelCount]=TCC1_CNT;
-	}
+//Frequency Retrieval section
+	phase=getphase(prevPhase,prevFreq,532);
+	pixelCount++;
 }
 
 ISR(USARTC0_DRE_vect)
 {
-	//USART_DataRegEmpty(&USART_data);
+	USART_DataRegEmpty(&USART_data);
 }
 
