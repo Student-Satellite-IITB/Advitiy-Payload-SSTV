@@ -1,5 +1,5 @@
 /*
- * ATXmega_SSTV_Encode.cpp
+ * ATXmega_SSTV_Encode.c
  *
  * Created: 29-08-2018 18:50:02
  * Author : Puneet Shrivas
@@ -111,7 +111,7 @@ uint8_t SPI_receive8()
     SPI_MasterTransceivePacket(&spiMasterC, &dataPacket);	//Wait for reception
 	return masterReceivedData[0];							
 }
-void  SPI_send16(uint16_t data)    			
+void SPI_send16(uint16_t data)
 {
 	PORTA_DIRSET = PIN0_bm;
 	PORTF_DIRSET = PIN0_bm|PIN1_bm|PIN2_bm|PIN3_bm|PIN4_bm|PIN5_bm|PIN6_bm|PIN7_bm;
