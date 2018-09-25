@@ -289,6 +289,8 @@ typedef struct Usart_and_buffer
  */
 #define USART_GetChar(_usart)  ((_usart)->DATA)
 
+#define USART USARTC0			  //Initialization of USART
+
 
 /* Functions for interrupt driven driver. */
 void USART_InterruptDriver_Initialize(USART_data_t * usart_data,
@@ -309,5 +311,7 @@ void USART_DataRegEmpty(USART_data_t * usart_data);
 /* Functions for polled driver. */
 void USART_NineBits_PutChar(USART_t * usart, uint16_t data);
 uint16_t USART_NineBits_GetChar(USART_t * usart);
-
+void SetUsart();
+void USARTsend(uint8_t data);
+void USARTsend16(uint16_t data);
 #endif

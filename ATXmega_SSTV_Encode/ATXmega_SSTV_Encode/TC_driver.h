@@ -63,6 +63,9 @@
 
 /* Definition of macros. */
 
+#define CPU_PRESCALER 1			  //Prescaler for Timer calculations
+
+
 /*! \brief Enables the event delay for this TC.
  *
  *  This macro enables a one clock cycle delay of event sources for this TC.
@@ -419,5 +422,8 @@ void TC1_SetCCCIntLevel( volatile TC1_t * tc, TC_CCCINTLVL_t intLevel );
 void TC1_SetCCDIntLevel( volatile TC1_t * tc, TC_CCDINTLVL_t intLevel );
 void TC1_Reset( volatile TC1_t * tc );
 
+void SetClock0();
+void SetClock1();
+void setUp16MhzExternalOsc();
 
 #endif

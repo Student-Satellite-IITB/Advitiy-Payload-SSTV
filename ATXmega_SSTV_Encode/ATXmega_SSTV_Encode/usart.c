@@ -73,6 +73,7 @@
  *****************************************************************************/
 #include "USART.h"
 
+USART_data_t USART_data;											//Instantiation of USART data packet
 
 
 /*! \brief Initializes buffer and selects what USART module to use.
@@ -354,4 +355,37 @@ void UART_TXBuffer_PutByte(USART_data_t * usart_data, uint8_t data)
 		usart_data->usart->CTRLA = tempCTRLA;
 	}
 	//return TXBuffer_FreeSpace;  //Nothing to be return
+}
+
+
+void SetUsart()
+{
+	PORTC.DIRSET = PIN3_bm;															   		//Set TX as output
+	PORTC.DIRCLR = PIN2_bm;					   												//Set RX as input
+	USART_InterruptDriver_Initialize(&USART_data, &USART, USART_DREINTLVL_LO_gc);
+	USART_Format_Set(USART_data.usart, USART_CHSIZE_8BIT_gc,USART_PMODE_DISABLED_gc, false);	//Set 8 bit format, no parity
+	USART_RxdInterruptLevel_Set(USART_data.usart, USART_RXCINTLVL_LO_gc);
+	USART_Baudrate_Set(&USART, 12 , 0);													//gives baudrate 9600
+	USART_Rx_Enable(USART_data.usart);
+	USART_Tx_Enable(USART_data.usart);
+	PMIC.CTRL |= PMIC_LOLVLEX_bm;																//Enable low level interrupt for USART
+}
+void USARTsend(uint8_t data)
+{
+	sei();											//Enable global interrupts
+	USART_TXBuffer_PutByte(&USART_data, data);		//Write data and wait for transfer
+	cli();											//Disable global interrupts
+}
+void USARTsend16(uint16_t data)
+{
+	uint8_t MSdata = ((data>>8) & 0x00FF);  		//filter out MS
+	uint16_t LSdata = (data & 0x00FF);				//filter out LS
+	sei();											//Enable global interrupts
+	USART_TXBuffer_PutByte(&USART_data, MSdata);	//Write MSdata and wait for transfer
+	USART_TXBuffer_PutByte(&USART_data, LSdata);	//Write LSdata and wait for transfer
+	cli();											//Disable global interrupts
+}
+ISR(USARTC0_DRE_vect)
+{
+	USART_DataRegEmpty(&USART_data);
 }

@@ -1,4 +1,4 @@
-TC_driver.d TC_driver.o: .././TC_driver.c .././avr_compiler.h \
+AD9833.d AD9833.o: .././AD9833.c .././AD9833.h .././avr_compiler.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdint.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdint.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdbool.h \
@@ -19,7 +19,9 @@ TC_driver.d TC_driver.o: .././TC_driver.c .././avr_compiler.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay_basic.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\math.h \
- .././TC_driver.h .././pmic_driver.h
+ .././spi_driver.h
+
+.././AD9833.h:
 
 .././avr_compiler.h:
 
@@ -63,6 +65,4 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\math.h:
 
-.././TC_driver.h:
-
-.././pmic_driver.h:
+.././spi_driver.h:

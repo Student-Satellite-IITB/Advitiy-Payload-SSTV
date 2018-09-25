@@ -67,6 +67,10 @@
 
 #include "avr_compiler.h"
 #include "TC_driver.h"
+#include "pmic_driver.h"
+
+int interruptPeriod = ((((F_CPU)/(CPU_PRESCALER*1000000))*532)-1);	//Counter cycles for 532us
+
 
 /*! \brief Configures clock source for the Timer/Counter 0.
  *
@@ -430,4 +434,44 @@ void TC1_Reset( volatile TC1_t * tc )
 
 	/* Issue Reset command. */
 	tc->CTRLFSET = TC_CMD_RESET_gc;
+}
+
+void SetClock0()
+ {
+	//Compare Match A timer													
+  /*PMIC_EnableLowLevel();
+ 	TCC0.CTRLB = TC0_CCAEN_bm | TC_WGMODE_FRQ_gc;
+ 	TCC0.INTCTRLB = (uint8_t) TC_CCAINTLVL_LO_gc;
+ 	TCC0.PER =UINT16_MAX;
+ 	TCC0_CCAH = ((TEMP>>8) & 0x00FF);
+ 	TCC0_CCAL = (TEMP & 0x00FF);
+ 	TCC0.CTRLA = TC_CLKSEL_DIV1_gc;*/
+  
+	//Overflow timer														
+	PMIC_EnableHighLevel();				//Enable interrupts : High level for timer
+	TCC0.CTRLA = TC_CLKSEL_DIV1_gc;		//Set Prescaler 1(Same as CPU_PRESCALER)
+	TCC0.CTRLB= TC_WGMODE_NORMAL_gc;    //Wave generation mode : Normal
+	TCC0.INTCTRLA = TC_OVFINTLVL_HI_gc;	//Enable overflow interrupt
+	TCC0.PER = interruptPeriod;		    //Initialize Period
+}
+
+void SetClock1()
+{	
+	TCC1.PER = 0xFF;					//Set period 
+	TCC1.CTRLA = TC_CLKSEL_DIV1_gc;	//Set Prescaler 1
+}
+
+void setUp16MhzExternalOsc()
+{
+	PORTD_DIR = 0x01;
+	//16MHz external crystal
+	OSC_XOSCCTRL = OSC_FRQRANGE_12TO16_gc | OSC_XOSCSEL_XTAL_16KCLK_gc;
+	//Enable external oscillator
+	OSC_CTRL |= OSC_XOSCEN_bm;
+	//Wait for clock stabilization
+	while(!(OSC_STATUS & OSC_XOSCRDY_bm));
+	// Selects clock system as external clock
+	// through change protection mechanism
+	CCP = CCP_IOREG_gc;
+	CLK_CTRL = CLK_SCLKSEL_XOSC_gc;
 }

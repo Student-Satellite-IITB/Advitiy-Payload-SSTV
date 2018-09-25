@@ -171,7 +171,7 @@ typedef struct SPI_Slave
  *  \return           True if data available, false if not.
  */
 #define SPI_SlaveDataAvailable(_spi) ( (_spi)->module->STATUS & SPI_IF_bm )
-
+#define NUM_BYTES 4				  //Size of Data Packet Array
 
 /* Prototype functions. Documentation found in source file */
 
