@@ -63,7 +63,7 @@
 
 /* Definition of macros. */
 
-#define CPU_PRESCALER 1			  //Prescaler for Timer calculations
+#define CPU_PRESCALER 64			  //Prescaler for Timer calculations
 
 
 /*! \brief Enables the event delay for this TC.

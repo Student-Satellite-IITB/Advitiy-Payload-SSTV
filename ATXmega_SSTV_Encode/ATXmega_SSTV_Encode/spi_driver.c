@@ -438,7 +438,7 @@ void SPI_send8(uint8_t data)
 uint8_t SPI_receive8()
 {
 	SPI_MasterCreateDataPacket(&dataPacket,masterSendData,masterReceivedData,NUM_BYTES,&PORTC,PIN4_bm);		
-    SPI_MasterTransceivePacket(&spiMasterC, &dataPacket);	//Wait for reception
+	SPI_MasterTransceivePacket(&spiMasterC, &dataPacket);	//Wait for reception
 	return masterReceivedData[0];							
 }
 void SPI_send16(uint16_t data)

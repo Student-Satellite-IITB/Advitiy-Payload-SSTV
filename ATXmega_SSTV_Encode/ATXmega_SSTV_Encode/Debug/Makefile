@@ -39,6 +39,7 @@ SUBDIRS :=
 C_SRCS +=  \
 ../AD9833.c \
 ../main.c \
+../NXH5104.c \
 ../pmic_driver.c \
 ../spi_driver.c \
 ../TC_driver.c \
@@ -54,6 +55,7 @@ ASM_SRCS +=
 OBJS +=  \
 AD9833.o \
 main.o \
+NXH5104.o \
 pmic_driver.o \
 spi_driver.o \
 TC_driver.o \
@@ -62,6 +64,7 @@ USART.o
 OBJS_AS_ARGS +=  \
 AD9833.o \
 main.o \
+NXH5104.o \
 pmic_driver.o \
 spi_driver.o \
 TC_driver.o \
@@ -70,6 +73,7 @@ USART.o
 C_DEPS +=  \
 AD9833.d \
 main.d \
+NXH5104.d \
 pmic_driver.d \
 spi_driver.d \
 TC_driver.d \
@@ -78,6 +82,7 @@ USART.d
 C_DEPS_AS_ARGS +=  \
 AD9833.d \
 main.d \
+NXH5104.d \
 pmic_driver.d \
 spi_driver.d \
 TC_driver.d \
@@ -97,6 +102,8 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+
+
 
 
 

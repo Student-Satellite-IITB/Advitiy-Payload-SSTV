@@ -16,60 +16,64 @@
 #include "spi_driver.h"
 #include "TC_driver.h"
 #include "AD9833.h"
+#include "NXH5104.h"
 
-volatile int frequency=1800,phase=0,prevPhase=0,prevFreq=0,pixelCount=0;
+volatile int frequency=1757,phase=0,prevPhase=0,prevFreq=0,pixelCount=0;
 
 int main(void)
 {
-	SetClock0();	//SetClock1();
-	SetUsart();		//sei();
-	SPI_Master_init();
-	setUp16MhzExternalOsc();
-	SPI_send16(0x100);	//Reset AD9833
-	Set_AD9833(1500,0);
-	_delay_ms(3000);
+	setUp16MhzExternalOsc();	//Required for setting 16Mhz frequency
+	SetClock0();				//Initialize 532 us interrupts
+	SPI_Master_init();			//Initialize SPI for AD9833
+	eepromInit();				//Initialize SPI for EEPROM
+	SetUsart();					
+	SPI_send16(0x100);			//Reset AD9833
 // VIS Code 
 	{_delay_ms(100);
 	Set_AD9833(1900,0);	_delay_ms(300);	//leader tone
 	Set_AD9833(1200,0);	_delay_ms(10);	//break
 	Set_AD9833(1900,0);	_delay_ms(300);	//leader
-	Set_AD9833(1200,0);	_delay_ms(29);	_delay_us(839);	//VIS start bit
+	Set_AD9833(1200,0);	_delay_ms(29);	_delay_us(961);	//VIS start bit
 	//PD90 VIS code = 99d = 0b1100011
-	Set_AD9833(1100,0);	_delay_ms(29);	_delay_us(839);	//bit 0=1
-	Set_AD9833(1100,0);	_delay_ms(29);	_delay_us(839);	//bit 1=1
-	Set_AD9833(1300,0);	_delay_ms(29);  _delay_us(839);	//bit 2=0
-	Set_AD9833(1300,0);	_delay_ms(29);	_delay_us(839);	//bit 3=0
-	Set_AD9833(1300,0);	_delay_ms(29);	_delay_us(839);	//bit 4=0
-	Set_AD9833(1100,0);	_delay_ms(29);	_delay_us(839);	//bit 5=1
-	Set_AD9833(1100,0);	_delay_ms(29);	_delay_us(839);	//bit 6=1
-	Set_AD9833(1300,0);	_delay_ms(29);	_delay_us(839);	//Parity bit
-	Set_AD9833(1200,0);	_delay_ms(29);	_delay_us(839);	//stop bit
+	Set_AD9833(1100,0);	_delay_ms(29);	_delay_us(961);	//bit 0=1
+	Set_AD9833(1100,0);	_delay_ms(29);	_delay_us(961);	//bit 1=1
+	Set_AD9833(1300,0);	_delay_ms(29);  _delay_us(961);	//bit 2=0
+	Set_AD9833(1300,0);	_delay_ms(29);	_delay_us(961);	//bit 3=0
+	Set_AD9833(1300,0);	_delay_ms(29);	_delay_us(961);	//bit 4=0
+	Set_AD9833(1100,0);	_delay_ms(29);	_delay_us(961);	//bit 5=1
+	Set_AD9833(1100,0);	_delay_ms(29);	_delay_us(961);	//bit 6=1
+	Set_AD9833(1300,0);	_delay_ms(29);	_delay_us(961);	//Parity bit
+	Set_AD9833(1200,0);	_delay_ms(29);	_delay_us(961);	//stop bit
 	}
 //Image Data	
 	for(int lineSet=0; lineSet<=128; lineSet++)
 	{
-		Set_AD9833(1200,0); _delay_ms(19); _delay_us(840);	//Sync Pulse
-		Set_AD9833(1500,0); _delay_ms(1); _delay_us(919);	//Porch
+		Set_AD9833(1200,0); _delay_ms(19); _delay_us(961);	//Sync Pulse
+		Set_AD9833(1500,0); _delay_ms(2); _delay_us(41);	//Porch
 	//Pixel Interrupt sequence
 		pixelCount=0;
 		TCC0.CNT=0;
 		sei();
-		while(pixelCount<=12800);
+		while(pixelCount<=1280);
 		cli();
 	}
+	Set_AD9833(0,0);
+	
 	while(1)
 	{
 		
 	}
 }
 
-ISR(TCC0_OVF_vect)
+ISR(TCC0_CCA_vect)
 {
 	Set_AD9833(frequency,phase);
 	prevPhase=phase;
 	prevFreq=frequency;
-	pixelCount++;
-//Frequency Retrieval section
+// Todo : Frequency Retrieval section from EEPROM
+	if(pixelCount==319) frequency = 2253;
+	else if(pixelCount==639) frequency = 1782;
+	else if(pixelCount==959) frequency = 1757;
 	phase=getphase(prevPhase,prevFreq,532);
 	pixelCount++;
 }

@@ -6,6 +6,8 @@ AD9833.c
 
 main.c
 
+NXH5104.c
+
 pmic_driver.c
 
 spi_driver.c

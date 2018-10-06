@@ -8,7 +8,7 @@
 #include "AD9833.h"
 #include "spi_driver.h"
 
-void Set_AD9833(float frequency, unsigned int phase)
+void Set_AD9833(float frequency, unsigned int phase) // Zero amplitude time : 39 miroseconds
 {
 	long FreqReg = (((float)frequency)*pow(2,28))/(float)FMCLK;	  //Calculate frequency to be sent to AD9833
 	int MSB = (int)((FreqReg &  0xFFFC000) >> 14);				  //Extract first 14 bits of FreqReg and place them at last 14 bits of MSB
