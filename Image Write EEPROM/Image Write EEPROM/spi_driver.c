@@ -456,18 +456,4 @@ void SPI_send16(uint16_t data)
 	PORTA_OUTSET = PIN0_bm;
 }
 
-void SPI_send24(uint32_t data)
-{
-	PORTA_DIRSET = PIN0_bm;
-	PORTF_DIRSET = PIN0_bm|PIN1_bm|PIN2_bm|PIN3_bm|PIN4_bm|PIN5_bm|PIN6_bm|PIN7_bm;
-	PORTA_OUTSET = PIN0_bm;
-	uint8_t MSdata = ((data>>8) & 0x00FF);		//filter out MS
-	uint8_t LSdata = (data & 0x00FF);			//filter out LS
-	SPI_MasterSSLow(ssPort, PIN4_bm);			//Set Slave Select Low
-	PORTA_OUTCLR = PIN0_bm;
-	SPI_MasterTransceiveByte(&spiMasterC, MSdata);
-	SPI_MasterTransceiveByte(&spiMasterC, LSdata);
-	SPI_MasterSSHigh(ssPort, PIN4_bm);			//Set Slave Select High
-	PORTA_OUTSET = PIN0_bm;
-}
 
