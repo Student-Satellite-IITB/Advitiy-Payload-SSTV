@@ -341,8 +341,8 @@ uint8_t SPI_MasterTransceiveByte(SPI_Master_t *spi, uint8_t TXdata)
 	}
 	/* Read received data. */
 	uint8_t result = spi->module->DATA;
-	//PORTF_OUTCLR=PIN0_bm|PIN1_bm|PIN2_bm|PIN3_bm|PIN4_bm|PIN5_bm|PIN6_bm|PIN7_bm;
-	//PORTF_OUTSET=result;
+	PORTF_OUTCLR=PIN0_bm|PIN1_bm|PIN2_bm|PIN3_bm|PIN4_bm|PIN5_bm|PIN6_bm|PIN7_bm;
+	PORTF_OUTSET=!result;
 	return(result);
 }
 
@@ -427,7 +427,7 @@ void SPI_Master_init()
 	PORTC.PIN4CTRL = PORT_OPC_WIREDANDPULL_gc;																		//Set PullUp at SS 
 	PORTC.OUTSET = PIN4_bm;																							//Set SS high for no Slave
 	SPI_MasterInit(&spiMasterC,&SPIC,&PORTC,false,SPI_MODE_2_gc,SPI_INTLVL_OFF_gc,true,SPI_PRESCALER_DIV4_gc);		//Initialize device as master (Mode 2, MSB first, 2X speed, prescaler 4)
-}
+	}
 
 void SPI_send8(uint8_t data)
 {

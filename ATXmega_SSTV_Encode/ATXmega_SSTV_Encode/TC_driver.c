@@ -436,7 +436,7 @@ void TC1_Reset( volatile TC1_t * tc )
 	tc->CTRLFSET = TC_CMD_RESET_gc;
 }
 
-int interruptPeriod = ((((F_CPU)/(CPU_PRESCALER*1000000))*600)-1);	//Counter cycles for 532us
+//int interruptPeriod = ((((F_CPU)/(CPU_PRESCALER*1000000))*600)-1);	//Counter cycles for 532us
 
 void SetClock0()
  {
@@ -445,7 +445,7 @@ void SetClock0()
  	TCC0.CTRLB = TC0_CCAEN_bm | TC_WGMODE_FRQ_gc;
  	TCC0.INTCTRLB = (uint8_t) TC_CCAINTLVL_LO_gc;
  	TCC0.PER =UINT16_MAX;
- 	TCC0_CCA = 8512;
+ 	TCC0_CCA = 8517.75;
  	TCC0.CTRLA = TC_CLKSEL_DIV1_gc;
 	PMIC_EnableLowLevel();
 // 	//Overflow timer														
