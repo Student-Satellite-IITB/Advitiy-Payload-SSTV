@@ -443,11 +443,11 @@ void SetClock0()
 	//Compare Match A timer													
 	
  	TCC0.CTRLB = TC0_CCAEN_bm | TC_WGMODE_FRQ_gc;
- 	TCC0.INTCTRLB = (uint8_t) TC_CCAINTLVL_LO_gc;
+ 	TCC0.INTCTRLB = (uint8_t) TC_CCAINTLVL_HI_gc;
  	TCC0.PER =UINT16_MAX;
  	TCC0_CCA = 8517.75;
  	TCC0.CTRLA = TC_CLKSEL_DIV1_gc;
-	PMIC_EnableLowLevel();
+	PMIC_EnableHighLevel();
 // 	//Overflow timer														
 // 	PMIC_EnableHighLevel();				//Enable interrupts : High level for timer
 // 	TCC0.CTRLA = TC_CLKSEL_DIV1_gc;		//Set Prescaler 1(Same as CPU_PRESCALER)
@@ -476,3 +476,4 @@ void setUp16MhzExternalOsc()
 	CCP = CCP_IOREG_gc;
 	CLK_CTRL = CLK_SCLKSEL_XOSC_gc;
 }
+

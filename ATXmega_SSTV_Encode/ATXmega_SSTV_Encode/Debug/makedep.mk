@@ -8,6 +8,8 @@ main.c
 
 NXH5104.c
 
+PD90.c
+
 pmic_driver.c
 
 spi_driver.c

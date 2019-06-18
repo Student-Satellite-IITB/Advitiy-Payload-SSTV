@@ -40,6 +40,7 @@ C_SRCS +=  \
 ../AD9833.c \
 ../main.c \
 ../NXH5104.c \
+../PD90.c \
 ../pmic_driver.c \
 ../spi_driver.c \
 ../TC_driver.c \
@@ -56,6 +57,7 @@ OBJS +=  \
 AD9833.o \
 main.o \
 NXH5104.o \
+PD90.o \
 pmic_driver.o \
 spi_driver.o \
 TC_driver.o \
@@ -65,6 +67,7 @@ OBJS_AS_ARGS +=  \
 AD9833.o \
 main.o \
 NXH5104.o \
+PD90.o \
 pmic_driver.o \
 spi_driver.o \
 TC_driver.o \
@@ -74,6 +77,7 @@ C_DEPS +=  \
 AD9833.d \
 main.d \
 NXH5104.d \
+PD90.d \
 pmic_driver.d \
 spi_driver.d \
 TC_driver.d \
@@ -83,6 +87,7 @@ C_DEPS_AS_ARGS +=  \
 AD9833.d \
 main.d \
 NXH5104.d \
+PD90.d \
 pmic_driver.d \
 spi_driver.d \
 TC_driver.d \
@@ -102,6 +107,8 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+
+
 
 
 

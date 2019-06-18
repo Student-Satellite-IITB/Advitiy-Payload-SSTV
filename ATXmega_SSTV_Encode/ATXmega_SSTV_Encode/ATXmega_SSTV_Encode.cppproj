@@ -173,6 +173,12 @@
     <Compile Include="NXH5104.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="PD90.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="PD90.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="pmic_driver.c">
       <SubType>compile</SubType>
     </Compile>

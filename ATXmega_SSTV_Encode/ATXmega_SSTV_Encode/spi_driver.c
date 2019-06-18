@@ -342,7 +342,7 @@ uint8_t SPI_MasterTransceiveByte(SPI_Master_t *spi, uint8_t TXdata)
 	/* Read received data. */
 	uint8_t result = spi->module->DATA;
 	PORTF_OUTCLR=PIN0_bm|PIN1_bm|PIN2_bm|PIN3_bm|PIN4_bm|PIN5_bm|PIN6_bm|PIN7_bm;
-	PORTF_OUTSET=!result;
+	//PORTF_OUTSET=!result;
 	return(result);
 }
 
